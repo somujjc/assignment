@@ -62,7 +62,7 @@ public class EventServiceImpl implements EventService {
         if(pageSize>100 || pageSize<1)
             pageSize=20;
 
-        Pageable pagenation= PageRequest.of(page-1,pageSize, Sort.by("timestamp").descending());
+        Pageable pagenation= PageRequest.of(page-1,pageSize, Sort.by("timeStamp").descending());
         Page<Event> resultPage =eventRepository.filterEvents(deviceId,sevierty,eventType,from,to,pagenation);
         response.put("Total Events", resultPage.getTotalElements());
         response.put("Page",page);
@@ -84,7 +84,7 @@ public class EventServiceImpl implements EventService {
         Map<String, Integer> bySeverity = new HashMap<>();
 
         Map<String, Integer> byEventType = new HashMap<>();
-        
+
         Map<String, Integer> deviceCount = new HashMap<>();
 
         for (Event event : events) {
