@@ -12,7 +12,7 @@ public class EventRequest {
 
     @JsonProperty("device_id")
     @NotBlank(message = "Device is required")
-    @Size(max = 64 , min = 6 , message = "Device id should be less than 6 and maximum 3")
+    @Size(max = 64 , min = 6 , message = "Device id should not be less than 6 and maximum 64")
     private String deviceId;
 
     @JsonProperty("event_type")
