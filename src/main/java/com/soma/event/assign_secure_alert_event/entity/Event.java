@@ -1,7 +1,5 @@
 package com.soma.event.assign_secure_alert_event.entity;
 
-import jakarta.persistence.*;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,7 +24,7 @@ public class Event {
     private String severity;
 
     @Column(nullable = false, name = "time_stamp")
-    private OffsetDateTime timestamp;
+    private OffsetDateTime timeStamp;
 
     @Column(nullable = true, columnDefinition = "JSON", name = "meta_data")
     private String metadata;
@@ -66,12 +64,12 @@ public class Event {
         this.severity = severity;
     }
 
-    public OffsetDateTime getTimestamp() {
-        return timestamp;
+    public OffsetDateTime getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setTimeStamp(OffsetDateTime timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getMetadata() {

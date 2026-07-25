@@ -16,6 +16,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class EventServiceImpl implements EventService {
         event.setDeviceId(eventRequest.getDeviceId());
         event.setEventType(eventRequest.getEventType());
         event.setSeverity(eventRequest.getSeverity());
-        event.setTimestamp(eventRequest.getReportedTime());
+        event.setTimeStamp(eventRequest.getReportedTime());
         try {
             if (eventRequest.getMetadata() != null) {
                 String metaData = objectMapper.writeValueAsString(eventRequest.getMetadata());
@@ -67,6 +68,59 @@ public class EventServiceImpl implements EventService {
         response.put("Page",page);
         response.put("page size",pageSize);
         response.put("events",resultPage.getContent());
+
+        return response;
+    }
+
+
+    @Override
+    public Map<String, Object> getSummary(OffsetDateTime from, OffsetDateTime to) {
+
+        List<Event> events = eventRepository.findEventsBetween(from, to);
+
+        int totalEvents = events.size();
+
+
+        Map<String, Integer> bySeverity = new HashMap<>();
+
+        Map<String, Integer> byEventType = new HashMap<>();
+        
+        Map<String, Integer> deviceCount = new HashMap<>();
+
+        for (Event event : events) {
+
+            String severity = event.getSeverity();
+            bySeverity.put(severity, bySeverity.getOrDefault(severity, 0) + 1);
+
+
+            String eventType = event.getEventType();
+            byEventType.put(eventType, byEventType.getOrDefault(eventType, 0) + 1);
+
+
+            String deviceId = event.getDeviceId();
+            deviceCount.put(deviceId, deviceCount.getOrDefault(deviceId, 0) + 1);
+        }
+
+
+        String mostActiveDevice = null;
+        int maxCount = 0;
+        for (Map.Entry<String, Integer> entry : deviceCount.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostActiveDevice = entry.getKey();
+            }
+        }
+
+
+        int highCount = bySeverity.getOrDefault("high", 0);
+        double highSeverityRate = totalEvents > 0 ? (double) highCount / totalEvents : 0.0;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total_events", totalEvents);
+        response.put("by_severity", bySeverity);
+        response.put("by_event_type", byEventType);
+        response.put("most_active_device", mostActiveDevice);
+        response.put("high_severity_rate", highSeverityRate);
 
         return response;
     }

@@ -30,7 +30,7 @@ public class EventController {
 
     @GetMapping("/events")
     public ResponseEntity<?> filterEvents(@RequestParam(name="device_id", required = false )String deviceId,
-                                         @RequestParam(name="severity" , required = false) String severity,
+                                          @RequestParam(name="severity" , required = false) String severity,
                                           @RequestParam(name="event_type" , required = false) String eventType,
                                           @RequestParam(required = false) OffsetDateTime from,
                                           @RequestParam(required = false) OffsetDateTime to,
@@ -42,4 +42,13 @@ public class EventController {
         return ResponseEntity.ok(response);
 
 }
+
+    @GetMapping("/summary")
+    public ResponseEntity<?> getSummary(
+            @RequestParam OffsetDateTime from,
+            @RequestParam OffsetDateTime to
+    ) {
+        Map<String, Object> summary = eventService.getSummary(from, to);
+        return ResponseEntity.ok(summary);
+    }
 }

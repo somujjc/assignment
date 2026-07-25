@@ -10,5 +10,8 @@ import java.util.Map;
 @Component
 public interface EventService {
     public Event createEvent(EventRequest eventRequest);
-    Map<String,Object> retrivedPageDetails(String deviceId, String sevierty, String eventType , OffsetDateTime from , OffsetDateTime to , int page, int pageSize);
+    Map<String,Object> retrivedPageDetails(String deviceId, String sevierty, String eventType , OffsetDateTime from ,
+                                           OffsetDateTime to , int page, int pageSize);
+
+    Map<String, Object> getSummary(OffsetDateTime from, OffsetDateTime to);
 }
